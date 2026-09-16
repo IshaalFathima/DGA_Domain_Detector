@@ -1,1 +1,2 @@
 - [Frozen scikit-learn compatibility](scikit-learn-artifacts.md) — preserved joblib models warn under the newer runtime but pass regression and live inference.
+- [Artifact route ownership](artifact-route-ownership.md) — multi-artifact publishes need unique service paths and explicit API-prefix ownership.
