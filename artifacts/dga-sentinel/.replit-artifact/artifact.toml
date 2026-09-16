@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "DGA Sentinel"
+description = "A production web application that analyzes domain names with a frozen machine-learning ensemble and explains the structural signals behind each DGA classification."
+version = "1.0.0"
+id = "artifacts/dga-sentinel"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19955
+
+[services.development]
+run = "pnpm --filter @workspace/dga-sentinel run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/dga-sentinel", "run", "build" ]
+
+[services.production.run]
+args = ["python", "artifacts/dga-sentinel/server.py"]
+
+[services.production.run.env]
+PORT = "19955"
+
+[services.production.health.startup]
+path = "/api/health"
+
+[services.env]
+PORT = "19955"
+BASE_PATH = "/"

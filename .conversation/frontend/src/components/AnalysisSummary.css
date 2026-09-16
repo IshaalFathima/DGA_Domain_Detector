@@ -1,0 +1,38 @@
+.analysis-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.obs-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.obs-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.obs-bullet {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1.6;
+  flex-shrink: 0;
+}
+
+.obs-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.obs-empty {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+}

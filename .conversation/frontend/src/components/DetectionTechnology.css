@@ -1,0 +1,146 @@
+.det-tech {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.model-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.model-card {
+  padding: 16px 18px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color var(--transition);
+}
+
+.model-card:hover {
+  border-color: var(--border-accent);
+}
+
+.model-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.model-number {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.model-weight {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.model-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.model-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.model-bar-track {
+  height: 3px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.model-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* ---- Technical scores --------------------------------------------------- */
+.tech-expand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tech-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition);
+}
+
+.tech-toggle:hover {
+  color: var(--accent);
+}
+
+.tech-scores {
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tech-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tech-row--total {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 10px;
+}
+
+.tech-key {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.tech-val {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent);
+  word-break: break-all;
+}
+
+.tech-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .model-cards {
+    grid-template-columns: 1fr;
+  }
+}

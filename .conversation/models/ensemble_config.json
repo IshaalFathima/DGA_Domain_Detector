@@ -1,0 +1,19 @@
+{
+    "ensemble_name": "Fusion 75/25",
+    "model_1_weight": 0.75,
+    "model_5_weight": 0.25,
+    "score_normalization": "robust_median_MAD",
+    "threshold": 0.1793,
+    "model_1": {
+        "model": "char_svm_model.joblib",
+        "vectorizer": "char_tfidf_vectorizer.joblib",
+        "config": "model_config.joblib"
+    },
+    "model_5": {
+        "model": "model5_char_structural.joblib",
+        "vectorizer": "model5_tfidf_vectorizer.joblib",
+        "scaler": "model5_scaler.joblib"
+    },
+    "feature_count_model_5": 24,
+    "notes": "Final candidate selected after unseen-family evaluation. Fusion uses 75% Model 1 and 25% Model 5 after robust median/MAD score standardization."
+}
