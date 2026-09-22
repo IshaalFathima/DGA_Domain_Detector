@@ -1,0 +1,75 @@
+IMPORTANT: We found a prediction discrepancy that must be investigated before deployment is considered complete.
+
+For the domain:
+rassb.cn
+
+The deployed website currently returns:
+Prediction: NO DGA DETECTED
+Ensemble score: -0.3357
+Decision threshold: -0.273063
+
+Since -0.3357 < -0.273063, the displayed decision is internally consistent.
+
+However, our previously recorded frozen external-validation results classified rassb.cn as DGA.
+
+DO NOT change the threshold or modify the model to force the expected result.
+
+Instead, investigate why the deployed inference differs from the frozen validation pipeline.
+
+Please verify all of the following:
+
+1. The exact same Model 1 artifact is loaded:
+   models/char_svm_model.joblib
+
+2. The exact same Model 1 TF-IDF vectorizer is loaded:
+   models/char_tfidf_vectorizer.joblib
+
+3. The exact same Model 5 artifacts are loaded:
+   models/model5_char_structural.joblib
+   models/model5_tfidf_vectorizer.joblib
+   models/model5_scaler.joblib
+
+4. Verify the exact 24 structural features and their order.
+
+5. Verify public-suffix-aware DGA label extraction.
+   For rassb.cn, the extracted DGA label should be:
+   rassb
+
+6. Verify the exact frozen ensemble:
+   75% normalized Model 1
+   25% normalized Model 5
+
+7. Verify the exact fixed normalization statistics.
+
+8. Verify the exact authoritative threshold:
+   -0.2730625331994264
+
+9. Verify that ensemble_calibrated_config.json is being used correctly.
+
+10. Verify that the deployed code is not accidentally:
+   - fitting the vectorizer
+   - fitting the scaler
+   - refitting any model
+   - using a different model artifact
+   - using different feature preprocessing
+   - reversing the decision_function sign
+   - applying normalization incorrectly
+
+11. Run rassb.cn directly through the backend and print/log:
+   - extracted label
+   - all 24 features
+   - Model 1 raw decision score
+   - Model 5 raw decision score
+   - normalized Model 1 score
+   - normalized Model 5 score
+   - final ensemble score
+   - threshold
+   - final prediction
+
+12. Compare those values against the original frozen external-validation pipeline.
+
+Do NOT retrain, refit, retune, or modify any model artifacts.
+
+Do NOT alter the threshold merely to make rassb.cn classify as DGA.
+
+After identifying the cause, fix only the inference/deployment discrepancy and retest.

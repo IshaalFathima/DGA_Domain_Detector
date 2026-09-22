@@ -1,0 +1,86 @@
+I need a FINAL REGRESSION VERIFICATION of the DEPLOYED WEBSITE.
+
+My requirement is NOT merely that the website loads.
+
+The deployed website/API MUST produce the exact same predictions for the 42 previously tested domains as the frozen ML validation run.
+
+IMPORTANT:
+Do NOT modify the ML model, model artifacts, threshold, ensemble weights, datasets, or feature definitions.
+
+Do NOT add hardcoded exceptions for any domain.
+
+Use the EXACT SAME prediction function used by POST /api/predict.
+
+Please create a temporary verification script/endpoint that runs these 42 domains through the exact production inference path:
+
+nvlyffua.com
+jhghrlufoh.com
+tqjhvylf.com
+hufqifjq.com
+guhmpoxzivhba.com
+jk9enwhansl2.chb
+orgt2q2r.cf
+gc9nz.tk
+6zltf.rocks
+qkzccy.net
+07tvvc.com
+7ubqo.ml
+53bcm.de
+hv7uv.mx
+nypno.biz
+rassb.cn
+onegg.site
+nttbiz.com
+givewp.com
+blackfreeqazyio.cc
+nvfowikhevmy.com
+nvfowikhevmy.net
+nvfowikhevmy.in
+nvfowikhevmy.ru
+sjhuqlwrqhqx.com
+sjhuqlwrqhqx.net
+sjhuqlwrqhqx.in
+sjhuqlwrqhqx.ru
+pxqgonyogeee.com
+bqkrtxgkmriwsiwcngtivpx.info
+jdtmfupdyueqeldvhsjzdvzob.net
+zqrmkpivrbxccawozqwqpfzh.org
+jk9enwhansl2.org
+sdqfodmf81m7.net
+5uro1uzspejk.net
+ub4hinsduf0p.net
+zs9ijo1er81u.com
+0t67c5arw9yf.net
+lev41encha38.net
+67k1q3c1mr8x.org
+7w1yf49irk5m.net
+gdunwhq7s9qb.org
+
+For each domain report:
+
+DOMAIN
+EXTRACTED LABEL
+MODEL 1 SCORE
+MODEL 5 SCORE
+ENSEMBLE SCORE
+THRESHOLD
+PREDICTION
+
+Then compare the predictions against the previously recorded frozen 42-domain validation results.
+
+VERY IMPORTANT:
+- The verification MUST use the same production predictor used by /api/predict.
+- Do not duplicate/reimplement the ML calculation for the test.
+- Do not change anything merely because a domain disagrees.
+- If a mismatch occurs, identify which inference stage differs.
+- Pay particular attention to rassb.cn.
+- If rassb.cn differs, investigate the inference pipeline rather than changing the threshold or adding an exception.
+
+Afterward, tell me:
+1. Number of matching predictions
+2. Number of mismatches
+3. Exact mismatching domains
+4. Whether the mismatch is caused by deployment/inference code
+5. Whether the public deployment has been republished with the verified current code
+
+Do not consider this complete until the deployed production inference path has been verified.
