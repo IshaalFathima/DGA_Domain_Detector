@@ -49,7 +49,11 @@ try:
     import joblib  # noqa: F401
     import numpy  # noqa: F401
     import scipy  # noqa: F401
-    from predictor import predictor, _robust_standardize_fixed
+    from predictor import (
+        predictor,
+        _get_detection_state,
+        _robust_standardize_fixed,
+    )
     _models_available = True
 except Exception as exc:
     _models_load_error = str(exc)
@@ -457,6 +461,29 @@ def test_classification_exactly_at_threshold_is_dga():
     assert classification == "DGA"
 
 
+def test_detection_state_clearly_above_threshold_is_dga():
+    score = DECISION_THRESHOLD + 0.20
+    assert _get_detection_state(score) == "DGA"
+
+
+def test_detection_state_within_margin_is_borderline():
+    score = DECISION_THRESHOLD + 0.05
+    assert _get_detection_state(score) == "BORDERLINE"
+
+
+def test_detection_state_clearly_below_threshold_is_not_dga_like():
+    score = DECISION_THRESHOLD - 0.20
+    assert _get_detection_state(score) == "NOT DGA-LIKE"
+
+
+def test_borderline_state_does_not_change_binary_classification():
+    score = DECISION_THRESHOLD - 0.05
+    classification = "DGA" if score >= DECISION_THRESHOLD else "NOT DGA-LIKE"
+
+    assert classification == "NOT DGA-LIKE"
+    assert _get_detection_state(score) == "BORDERLINE"
+
+
 # ============================================================
 # 14. End-to-end predictor.predict() (INTEGRATION)
 # ============================================================
@@ -466,7 +493,8 @@ def test_predict_returns_expected_keys(loaded_predictor):
     result = loaded_predictor.predict("nvlyffua.com")
     expected_keys = {
         "domain", "normalized_domain", "dga_label",
-        "classification", "ensemble_score", "threshold", "threshold_display",
+        "classification", "detection_state", "ensemble_score", "threshold",
+        "threshold_margin", "threshold_display",
         "model1_score", "model1_normalized_score",
         "model5_score", "model5_normalized_score",
         "features", "observations",
@@ -487,6 +515,19 @@ def test_predict_classification_consistent_with_score(loaded_predictor):
         assert result["classification"] == "DGA"
     else:
         assert result["classification"] == "NOT DGA-LIKE"
+
+
+@needs_models
+def test_rassb_is_borderline_without_changing_classification(loaded_predictor):
+    result = loaded_predictor.predict("rassb.cn")
+
+    assert result["classification"] == "NOT DGA-LIKE"
+    assert result["detection_state"] == "BORDERLINE"
+    assert math.isclose(
+        result["threshold_margin"],
+        result["ensemble_score"] - result["threshold"],
+        rel_tol=1e-12,
+    )
 
 
 @needs_models

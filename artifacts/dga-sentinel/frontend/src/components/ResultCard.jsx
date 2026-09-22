@@ -7,19 +7,23 @@ const THRESHOLD_DISPLAY = '-0.273063'
  * The ensemble score is a model decision score, NOT a probability.
  */
 export default function ResultCard({ result }) {
-  const isDGA = result.classification === 'DGA'
+  const isDGA = result.detection_state === 'DGA'
+  const isBorderline = result.detection_state === 'BORDERLINE'
+  const stateClass = isDGA ? 'dga' : isBorderline ? 'borderline' : 'safe'
 
   return (
-    <div className={`result-card ${isDGA ? 'result-card--dga' : 'result-card--safe'}`}>
+    <div className={`result-card result-card--${stateClass}`}>
       {/* ---- Verdict ---------------------------------------------------- */}
       <div className="result-verdict">
-        <div className={`verdict-badge ${isDGA ? 'verdict-badge--dga' : 'verdict-badge--safe'}`}>
+        <div className={`verdict-badge verdict-badge--${stateClass}`}>
           <span className="verdict-dot" />
-          {isDGA ? 'DGA DETECTED' : 'NO DGA DETECTED'}
+          {isDGA ? 'DGA DETECTED' : isBorderline ? 'BORDERLINE' : 'NO DGA DETECTED'}
         </div>
         <p className="verdict-description">
           {isDGA
             ? 'Likely algorithmically generated'
+            : isBorderline
+              ? 'The ensemble score is close to the detection threshold. The DGA classification is inconclusive.'
             : 'More consistent with legitimate-domain patterns'}
         </p>
       </div>
@@ -38,7 +42,7 @@ export default function ResultCard({ result }) {
       <div className="result-scores">
         <div className="score-cell">
           <span className="score-label">DETECTION STRENGTH</span>
-          <span className={`score-value ${isDGA ? 'score-value--dga' : 'score-value--safe'}`}>
+          <span className={`score-value score-value--${stateClass}`}>
             {result.ensemble_score.toFixed(4)}
           </span>
           <span className="score-note">ensemble model score</span>

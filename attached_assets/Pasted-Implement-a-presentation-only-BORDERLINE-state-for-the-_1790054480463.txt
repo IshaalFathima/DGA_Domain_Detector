@@ -1,0 +1,88 @@
+Implement a presentation-only BORDERLINE state for the existing DGA Sentinel application.
+
+IMPORTANT — DO NOT MODIFY THE ML PIPELINE:
+- Do not retrain or refit anything.
+- Do not modify either model.
+- Do not modify model weights (75% / 25%).
+- Do not modify the decision threshold:
+  - exact threshold = -0.2730625331994264
+- Do not modify normalization statistics.
+- Do not modify feature extraction.
+- Do not modify datasets or model artifacts.
+- Do not add domain-specific exceptions.
+- Do not change the existing binary classification logic.
+
+CURRENT BINARY LOGIC MUST REMAIN:
+classification = "DGA" if ensemble_score >= DECISION_THRESHOLD else "NOT DGA-LIKE"
+
+We are ONLY adding a presentation state based on distance from the existing threshold.
+
+Use:
+BORDERLINE_MARGIN = 0.10
+
+Define:
+distance_from_threshold = abs(ensemble_score - DECISION_THRESHOLD)
+
+Then:
+- if distance_from_threshold <= BORDERLINE_MARGIN:
+    detection_state = "BORDERLINE"
+- elif ensemble_score >= DECISION_THRESHOLD:
+    detection_state = "DGA"
+- else:
+    detection_state = "NOT DGA-LIKE"
+
+IMPORTANT:
+The existing `classification` field must remain completely unchanged.
+For example, rassb.cn must still have:
+classification = "NOT DGA-LIKE"
+if its current ensemble score remains -0.33570572503586604.
+
+It should additionally have:
+detection_state = "BORDERLINE"
+
+BACKEND:
+1. In artifacts/dga-sentinel/backend/predictor.py, add the detection_state calculation immediately after the existing ensemble score/classification logic.
+2. In artifacts/dga-sentinel/backend/schemas.py, add:
+   detection_state: str
+   threshold_margin: float
+3. Update the API response construction wherever necessary so these two fields are returned.
+4. threshold_margin should be:
+   ensemble_score - DECISION_THRESHOLD
+5. Do not remove or rename any existing response fields.
+
+FRONTEND:
+Update:
+artifacts/dga-sentinel/frontend/src/components/ResultCard.jsx
+
+Use result.detection_state for presentation.
+
+For BORDERLINE:
+- Display: "BORDERLINE"
+- Description:
+  "The ensemble score is close to the detection threshold. The DGA classification is inconclusive."
+
+For DGA:
+- Keep the existing DGA presentation.
+
+For NOT DGA-LIKE:
+- Keep the existing legitimate-domain presentation.
+
+Do not call BORDERLINE a probability or confidence percentage.
+Do not use "risk" terminology.
+
+Add appropriate styling for the borderline state using the existing visual design system. Do not introduce a hacker/cheesy aesthetic.
+
+TESTING:
+- Add/update backend tests for:
+  1. a score clearly above threshold -> DGA
+  2. a score within +/- 0.10 of threshold -> BORDERLINE
+  3. a score clearly below threshold -> NOT DGA-LIKE
+- Verify that the existing `classification` field remains unchanged.
+- Run the full existing test suite.
+- Do not deploy or republish yet.
+
+After making the changes, report:
+1. Files changed.
+2. Exact detection-state logic.
+3. Test results.
+4. Confirm that ML models, threshold, weights, normalization, features, datasets, and artifacts were not modified.

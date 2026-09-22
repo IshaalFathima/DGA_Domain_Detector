@@ -34,8 +34,10 @@ class PredictResponse(BaseModel):
 
     # Classification
     classification: str          # "DGA" or "NOT DGA-LIKE"
+    detection_state: str         # "DGA", "BORDERLINE", or "NOT DGA-LIKE"
     ensemble_score: float
     threshold: float
+    threshold_margin: float
     threshold_display: str
 
     # Per-model raw and normalized scores

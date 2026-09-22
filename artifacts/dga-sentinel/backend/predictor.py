@@ -41,6 +41,8 @@ from explanation import generate_observations
 
 logger = logging.getLogger(__name__)
 
+BORDERLINE_MARGIN: float = 0.10
+
 
 def _robust_standardize_fixed(x: float, ref_median: float, ref_mad: float) -> float:
     """
@@ -53,6 +55,18 @@ def _robust_standardize_fixed(x: float, ref_median: float, ref_mad: float) -> fl
         # Fallback — should not occur with properly frozen stats
         return x - ref_median
     return (x - ref_median) / (1.4826 * ref_mad)
+
+
+def _get_detection_state(ensemble_score: float) -> str:
+    """Return the presentation state without changing binary classification."""
+    threshold_margin = ensemble_score - DECISION_THRESHOLD
+    distance_from_threshold = abs(threshold_margin)
+
+    if distance_from_threshold <= BORDERLINE_MARGIN:
+        return "BORDERLINE"
+    if ensemble_score >= DECISION_THRESHOLD:
+        return "DGA"
+    return "NOT DGA-LIKE"
 
 
 class ModelPredictor:
@@ -141,6 +155,8 @@ class ModelPredictor:
         classification: str = (
             "DGA" if ensemble_score >= DECISION_THRESHOLD else "NOT DGA-LIKE"
         )
+        threshold_margin: float = ensemble_score - DECISION_THRESHOLD
+        detection_state: str = _get_detection_state(ensemble_score)
 
         # ------------------------------------------------------------------ #
         # 7. Deterministic observations
@@ -152,8 +168,10 @@ class ModelPredictor:
             "normalized_domain": normalized,
             "dga_label": dga_label,
             "classification": classification,
+            "detection_state": detection_state,
             "ensemble_score": ensemble_score,
             "threshold": DECISION_THRESHOLD,
+            "threshold_margin": threshold_margin,
             "threshold_display": DECISION_THRESHOLD_DISPLAY,
             "model1_score": model1_score,
             "model1_normalized_score": norm1,
