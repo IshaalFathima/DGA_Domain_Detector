@@ -1,0 +1,18 @@
+{
+    "ensemble_name": "Fusion 75/25",
+    "model_1_weight": 0.75,
+    "model_5_weight": 0.25,
+    "score_normalization": "robust_median_MAD_fixed_reference",
+    "model_1_reference_median": 0.527762486469102,
+    "model_1_reference_mad": 1.371751030955786,
+    "model_5_reference_median": 0.23580731608378547,
+    "model_5_reference_mad": 1.2519861168469708,
+    "calibration_fraction": 0.2,
+    "calibration_random_state": 123,
+    "threshold_selection_rule": "maximize recall subject to calibration FPR <= 2%",
+    "threshold": -0.2730625331994264,
+    "final_test_used_for_calibration": false,
+    "retraining": false,
+    "vectorizer_fitting": false,
+    "scaler_fitting": false
+}
